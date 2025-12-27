@@ -76,7 +76,12 @@ export async function POST(req: NextRequest) {
     let pageKey: string | undefined = undefined;
 
     do {
-      const body = pageKey ? { ...baseBody, pageKey } : baseBody;
+      let body: Record<string, any>;
+      if (pageKey) {
+        body = { ...baseBody, pageKey };
+      } else {
+        body = baseBody;
+      }
       const r = await fetch(url, {
         method: "POST",
         headers: { "content-type": "application/json" },
