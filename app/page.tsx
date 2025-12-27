@@ -15,7 +15,7 @@ function usd(n: number) {
 }
 
 export default function Page() {
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState("0x1FcCC097db89A86Bfc474A1028F93958295b1Fb7");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<any | null>(null);
