@@ -24,10 +24,10 @@ function formatUnits(atomic: string, decimals: number): string {
   }
   
   const d = Math.max(0, Math.min(36, Number.isFinite(decimals) ? decimals : 18));
-  const base = 10n ** BigInt(d);
+  const base = BigInt(10) ** BigInt(d);
   const whole = bi / base;
   const frac = bi % base;
-  if (frac === 0n) return whole.toString();
+  if (frac === BigInt(0)) return whole.toString();
   let fracStr = frac.toString().padStart(d, "0");
   // trim trailing zeros
   fracStr = fracStr.replace(/0+$/, "");
