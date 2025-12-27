@@ -270,8 +270,7 @@ export default function Page() {
         )}
 
         <footer className="mt-14 text-center text-xs text-slate-500">
-          Built with Next.js App Router · Exact balances via BigInt · Alchemy on
-          server
+          Built by Prajwal Sonawane · Next.js · Multi-Chain ERC-20 Portfolio Tracker
         </footer>
       </div>
     </div>
