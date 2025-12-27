@@ -59,24 +59,21 @@ export default function Page() {
       setSortDir("asc");
     }
   }
-  
+
   const sortedPositions = useMemo(() => {
     if (!data?.positions || !sortKey) return data?.positions ?? [];
-  
+
     return [...data.positions].sort((a: any, b: any) => {
       const av = a[sortKey] ?? 0;
       const bv = b[sortKey] ?? 0;
-  
+
       if (typeof av === "string") {
-        return sortDir === "asc"
-          ? av.localeCompare(bv)
-          : bv.localeCompare(av);
+        return sortDir === "asc" ? av.localeCompare(bv) : bv.localeCompare(av);
       }
-  
+
       return sortDir === "asc" ? av - bv : bv - av;
     });
   }, [data, sortKey, sortDir]);
-  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 text-slate-900">
@@ -85,12 +82,11 @@ export default function Page() {
         <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-4xl font-semibold tracking-tight">
-              Ethereum Portfolio Overview
+              Multi-Chain Portfolio Overview
             </h1>
             <p className="mt-1 text-sm text-slate-600 max-w-xl">
-              Track every ERC-20 token, balance, and USD value — fetched directly
-              from Ethereum mainnet in real time. No wallets connected. No keys
-              exposed.
+              Track ERC-20 token balances and USD values across Ethereum, Arbitrum,
+              BNB Chain, and Optimism. No wallets connected. No keys exposed.
             </p>
           </div>
 
@@ -146,23 +142,18 @@ export default function Page() {
                           transition-all duration-300 ease-out
                           hover:-translate-y-1 hover:shadow-lg"
               >
-                {/* gradient hover overlay */}
                 <div
                   className="pointer-events-none absolute inset-0
                             bg-gradient-to-br from-slate-100/0 via-slate-100/0 to-slate-200/40
                             opacity-0 transition-opacity duration-300
                             group-hover:opacity-100"
                 />
-
-              <div className="relative">
-                <div className="text-xs uppercase tracking-wide text-slate-500">
-                  {kpi.label}
+                <div className="relative">
+                  <div className="text-xs uppercase tracking-wide text-slate-500">
+                    {kpi.label}
+                  </div>
+                  <div className="mt-1 text-2xl font-semibold">{kpi.value}</div>
                 </div>
-                <div className="mt-1 text-2xl font-semibold">
-                  {kpi.value}
-                </div>
-              </div>
-
               </div>
             ))}
           </section>
@@ -172,15 +163,40 @@ export default function Page() {
         {data?.positions?.length ? (
           <section className="mt-10 rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="min-w-full text-sm">
+              <table className="w-full text-sm table-fixed">
                 <thead className="sticky top-0 bg-slate-50 border-b">
                   <tr className="text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
-                  <th onClick={() => onSort("symbol")} className="px-4 py-3 cursor-pointer">Token</th>
-                  <th onClick={() => onSort("network")} className="px-4 py-3 cursor-pointer">Network</th>
-                  <th onClick={() => onSort("balance")} className="px-4 py-3 text-right cursor-pointer">Balance</th>
-                  <th onClick={() => onSort("priceUsd")} className="px-4 py-3 text-right cursor-pointer">Price</th>
-                  <th onClick={() => onSort("valueUsd")} className="px-4 py-3 text-right cursor-pointer">Value</th>
-                  <th className="px-4 py-3 text-right">Weight</th>
+                    <th
+                      onClick={() => onSort("symbol")}
+                      className="px-4 py-3 cursor-pointer w-44"
+                    >
+                      Token
+                    </th>
+                    <th
+                      onClick={() => onSort("network")}
+                      className="px-4 py-3 cursor-pointer w-28"
+                    >
+                      Network
+                    </th>
+                    <th
+                      onClick={() => onSort("balance")}
+                      className="px-4 py-3 text-right cursor-pointer w-32"
+                    >
+                      Balance
+                    </th>
+                    <th
+                      onClick={() => onSort("priceUsd")}
+                      className="px-4 py-3 text-right cursor-pointer w-32"
+                    >
+                      Price
+                    </th>
+                    <th
+                      onClick={() => onSort("valueUsd")}
+                      className="px-4 py-3 text-right cursor-pointer w-32"
+                    >
+                      Value
+                    </th>
+                    <th className="px-4 py-3 text-right w-20">Weight</th>
                   </tr>
                 </thead>
 
@@ -189,8 +205,7 @@ export default function Page() {
                     const value = p.valueUsd ?? 0;
                     const balanceDisplay =
                       typeof p.balance === "string"
-                        ? Number(p.balance) > 0 &&
-                          Number(p.balance) < 0.000001
+                        ? Number(p.balance) > 0 && Number(p.balance) < 0.000001
                           ? Number(p.balance).toExponential(3)
                           : Number(p.balance).toLocaleString()
                         : String(p.balance);
@@ -202,17 +217,11 @@ export default function Page() {
                     return (
                       <tr
                         key={idx}
-                        className="
-                          border-t last:border-b transition
-                          even:bg-slate-50/60
-                          hover:bg-slate-100
-                        "
+                        className="border-t last:border-b transition even:bg-slate-50/60 hover:bg-slate-100"
                       >
-
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-3 w-44">
                           <div className="flex items-center gap-3">
                             {p.logo ? (
-                              // eslint-disable-next-line @next/next/no-img-element
                               <img
                                 src={p.logo}
                                 className="w-8 h-8 rounded-full"
@@ -221,7 +230,7 @@ export default function Page() {
                             ) : (
                               <div className="w-8 h-8 rounded-full bg-slate-200" />
                             )}
-                            <div>
+                            <div className="break-words">
                               <div className="font-medium">{p.symbol}</div>
                               <div className="text-xs text-slate-500">
                                 {p.name || ""}
@@ -230,19 +239,19 @@ export default function Page() {
                           </div>
                         </td>
 
-                        <td className="px-4 py-3 text-slate-600">
+                        <td className="px-4 py-3 text-slate-600 w-28 break-words">
                           {p.network}
                         </td>
-                        <td className="px-4 py-3 text-right font-mono">
+                        <td className="px-4 py-3 text-right font-mono w-32">
                           {balanceDisplay}
                         </td>
-                        <td className="px-4 py-3 text-right">
+                        <td className="px-4 py-3 text-right w-32">
                           {p.priceUsd != null ? usd(p.priceUsd) : "—"}
                         </td>
-                        <td className="px-4 py-3 text-right font-medium">
+                        <td className="px-4 py-3 text-right font-medium w-32">
                           {p.valueUsd != null ? usd(p.valueUsd) : "—"}
                         </td>
-                        <td className="px-4 py-3 text-right text-slate-600">
+                        <td className="px-4 py-3 text-right text-slate-600 w-20">
                           {weight.toFixed(1)}%
                         </td>
                       </tr>

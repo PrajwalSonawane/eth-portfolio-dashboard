@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     // Fetch all pages from Tokens By Wallet for ETH Mainnet
     const url = `${DATA_BASE}/${apiKey}/assets/tokens/by-address`;
     const baseBody: any = {
-      addresses: [{ address, networks: ["eth-mainnet"] }],
+      addresses: [{ address, networks: ["eth-mainnet", "arb-mainnet", "bnb-mainnet", "opt-mainnet"] }],
       withMetadata: true,
       withPrices: true,
       includeNativeTokens: true,
@@ -117,8 +117,15 @@ export async function POST(req: NextRequest) {
         const priceUsd = pickUsdPrice(t.tokenPrices) ?? null;
         const valueUsd = priceUsd != null ? balanceNum * priceUsd : null;
 
+        const networkSymbols: Record<string, string> = {
+          "eth-mainnet": "ETH",
+          "arb-mainnet": "ARB",
+          "bnb-mainnet": "BNB",
+          "opt-mainnet": "OP",
+        };
+
         return {
-          network: t.network || "eth-mainnet",
+          network: networkSymbols[t.network] || "eth-mainnet",
           contractAddress: t.tokenAddress ?? null, // null = native ETH
           symbol: meta.symbol ?? (t.tokenAddress ? "TOKEN" : "ETH"),
           name: meta.name ?? null,
